@@ -28,6 +28,7 @@ var IsoControl = L.Control.extend({
     
     var container = L.DomUtil.create('div');
 		var c = $('<div class="transvisor-control" />');
+    this.c = c;
 		var self = this;
 	
     // Scenario selector
@@ -81,19 +82,28 @@ var IsoControl = L.Control.extend({
 			.text('Loading indicators')
 			.addClass('transvisor-control-indicators')
 			.appendTo(c);
+      
+      // Legend
+    $('<hr />').appendTo(c);
+    this.legend = $('<div />').addClass('transvisor-legend').appendTo(c);
 			
 		// Layer control
-		$('<hr />').appendTo(c);
-    $('<div />').text('Displayed features:').appendTo(c)
-		$('<ul />')
-			.addClass('transvisor-control-toggle')
-			.appendTo(c);
+    // $('<hr />').appendTo(c);
+    //     $('<div />').text('Displayed features:').appendTo(c)
+    // $('<ul />')
+    //   .addClass('transvisor-control-toggle')
+    //   .appendTo(c);
 
 		// Disable click propogation.
 		c.appendTo($(container));
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.on(container, 'mousewheel', L.DomEvent.stopPropagation);				
     return container;    
+  },
+  
+  add_legend: function(elem) {
+    this.legend.empty();
+    this.legend.append(elem);
   },
   
   find_scenario: function(id) {
@@ -161,7 +171,8 @@ var IsoControl = L.Control.extend({
     var style = style || {};
     // var icon = icon || 'test.png';
     if (icon) {
-      style.pointToLayer = function(feature,latlon) {return L.marker(latlon, {icon: new baseicon({className: 'gtfs-jobs', iconUrl:icon})})}      
+      style.pointToLayer = function(feature,latlon) {return L.marker(latlon, {icon: new baseicon({className: 'gtfs-jobs', iconUrl:icon})})} 
+      style.onEachFeature = function(feature, layer) {layer.bindPopup(feature.properties.name)}     
     }
 		$.getJSON(uri, function(data) {
       var layer = new L.geoJson(data, style).addTo(self.layerroutes);    
@@ -192,6 +203,18 @@ var IsoControl = L.Control.extend({
 		$('.isochrone-'+seconds).show();
 	},
 
+	isochrone_draw: function(layer, isochrones, style) {
+		// Redraw isochrones
+    layer.clearLayers();
+    for (var isochrone in isochrones.features) {
+    	isochrone = isochrones.features[isochrone];
+		var time = isochrone.properties['Time'];
+		style['className'] = 'isochrone isochrone-'+time;
+		var isochronelayer = new L.geoJson(isochrone, style).addTo(layer);
+		$('.isochrone-'+time).hide();
+		}
+	},
+
 	indicator_time: function(seconds) {
     // Calculate sum of indicated value
     function indicator_sum(indicator, key, seconds) {
@@ -207,8 +230,6 @@ var IsoControl = L.Control.extend({
 
     ///////////////////
     var ind = [this.options.indicator1, this.options.indicator2]; 
-    // this.options.scenarios[this.options.scenario1],
-    // this.options.scenarios[this.options.scenario2]
     var labels = {'census:pop':'Population', 'census:jobs':'Jobs'}
     var keys = {};
     var cats = {};
@@ -220,38 +241,48 @@ var IsoControl = L.Control.extend({
     });
     keys = Object.keys(keys);
     cats = Object.keys(cats);
-
     var data = cats.map(function(k) {
       var d = {}
-      d.key = k
+      d.key = k;
+      d.label = labels[k];
       d.data = ind.map(function(i) {
         return {name:i.name, key:k, value:indicator_sum(i,k,seconds), max:indicator_sum(i,k,seconds), label:labels[k]};
       });
       return d
     });
+    var cats = ['Population', 'Jobs'];
     
     //////////////////////////////////
     var margin = {
-        top: 20, 
+        top: 70, 
         right: 20, 
-        bottom: 30, 
-        left: 40};
-    var width = 300 - margin.left - margin.right;
-    var height = 300 - margin.top - margin.bottom;
+        bottom: 40, 
+        left: 70};
+        
+    var width = elem.width() - margin.left - margin.right;
+
+    var height = 400 - margin.top - margin.bottom;
+
     var x0 = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
+
     var x1 = d3.scale.ordinal();
+
     var y = d3.scale.linear()
         .range([height, 0]);
+
     var color = d3.scale.ordinal()
         .range(this.options.colors);
+
     var xAxis = d3.svg.axis()
         .scale(x0)
         .orient("bottom");
+
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
         .tickFormat(d3.format(".2s"));
+
     var svg = d3.select(elem[0]).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -269,59 +300,50 @@ var IsoControl = L.Control.extend({
 
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis)
-      // .append("text")
-      //   .attr("transform", "rotate(-90)")
-      //   .attr("y", 6)
-      //   .attr("dy", ".71em")
-      //   .style("text-anchor", "end")
-      //   .text("Population");
-
+        .call(yAxis);
+        
     var state = svg.selectAll(".state")
         .data(data)
       .enter().append("g")
         .attr("class", "g")
-        .attr("transform", function(d) {return "translate(" + x0(d.key) + ",0)"; });
+        .attr("transform", function(d) {return "translate(" + x0(d.label) + ",0)"});
 
     state.selectAll("rect")
-        .data(function(d) {return d.data})
-      .enter().append("rect")
+        .data(function(d) {return d.data}).enter()
+      .append("rect")
         .attr("width", x1.rangeBand())
         .attr("x", function(d) { return x1(d.name); })
         .attr("y", function(d) { return y(d.value); })
-        .attr("height", function(d) { return height - y(d.value); })
-        .attr("title", function(d) {return d.value})
-        .style("fill", function(d) { return color(d.name); });
+        .attr("height", function(d) { return height - y(d.value) })
+        .style("fill", function(d) { return color(d.name) });
     
+    state.selectAll("text")
+        .data(function(d){return d.data}).enter()
+        .append("text")
+        .attr("x", function(d) {return x1(d.name)})
+        .attr("y", function(d) {return y(d.value)})
+        .attr("dx", 10)
+        .attr("dy", 20)
+        .text(function(d) {return Math.floor(d.value/1000)+"k"});
+          
+    // Subtract 50px to put into top margin.
     var legend = svg.selectAll(".legend")
         .data(keys)
       .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        .attr("transform", function(d, i) { return "translate(0," + ((i * 25)-60) + ")"; });        
 
     legend.append("rect")
-        .attr("x", width - 18)
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("x", width - 22)
+        .attr("width", 22)
+        .attr("height", 22)
         .style("fill", color);
 
     legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9)
+        .attr("x", width - 27)
+        .attr("y", 11)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .text(function(d) {return d; });
-	},
-
-	isochrone_draw: function(layer, isochrones, style) {
-		// Redraw isochrones
-    layer.clearLayers();
-    for (var isochrone in isochrones.features) {
-    	isochrone = isochrones.features[isochrone];
-		var time = isochrone.properties['Time'];
-		style['className'] = 'isochrone isochrone-'+time;
-		var isochronelayer = new L.geoJson(isochrone, style).addTo(layer);
-		$('.isochrone-'+time).hide();
-		}
+        .text(function(d) {return d});
 	}
 });

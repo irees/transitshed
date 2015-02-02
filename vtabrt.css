@@ -1,0 +1,66 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+* {
+	font-size:14pt;			
+}
+
+/* transvisor */
+.transvisor-control {
+	width: 400px;
+	background: white;
+	padding: 0px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border: solid 2px #ccc;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.transvisor-control select {
+	width: 80%;
+	padding: 10px;
+	margin: 5px;
+}
+
+.transvisor-control hr {
+	border: 0px;
+	height: 2px;
+	background: #ccc;
+}
+
+.transvisor-control-toggle {
+	list-style: none;
+	text-align: left;
+	padding: 5px;
+	margin: 0px;
+}
+
+.transvisor-control .transvisor-legend ul {
+	list-style: none;
+	text-align: left;
+	padding: 5px;
+}
+.transvisor-control img {
+	padding: 5px;
+	vertical-align: middle;
+}
+
+/* d3 */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}

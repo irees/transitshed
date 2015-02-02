@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Transit Attractor</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="vtabrt.css" />
+	<link rel="stylesheet" href="dist/leaflet.css" />
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="dist/leaflet.js"></script>
+	<script src="dist/jquery.js"></script>
+	<script src="vtabrt.js"></script>
+</head>
+<body>
+	<div id="map" style="height: 100%"></div>
+	<script>
+		// Setup
+		var DATASET = 'vtabrt';
+		var SCENARIOS = [
+			{name:'Current', id:'current'},
+			{name:'Current + BART', id:'current+bart-sj'},
+		];
+		
+		var stop_initial = {"stop_lat": "37.399738040999999", "zone_id": "-122.11047346700001", "stop_lon": "-122.11047346700001", "stop_id": "500", "stop_desc": "", "stop_name": "EL CAMINO & SHOWERS"};
+
+		var leafletmap = L.map('map').setView([stop_initial['stop_lat'], stop_initial['stop_lon']], 12);		
+		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			id: 'woolie.jikl9dnl'
+		}).addTo(leafletmap);
+		
+		// Initialize
+		$.getJSON('data/vta-brt-stops.json', function(data) {
+			var c = new IsoControl({
+				dataset: DATASET,
+				stops: data,
+				stop_initial: stop_initial,
+				scenarios: SCENARIOS,
+				scenario1: 'current',
+				scenario2: 'current+bart-sj',
+				time: 2700		
+			})
+			c.addTo(leafletmap);
+			c.load(c.options.scenario1, c.options.scenario2, stop_initial);		
+			c.load_geojson('data/test-bart-sj.geojson',  'BART to San Jose', {color: '#8ce485', opacity: 1.0, weight: 4.0});
+			c.load_geojson('data/caltrain.geojson', 'Caltrain', {color: '#FF0000', opacity: 1.0, weight: 4.0});
+			c.load_geojson('data/bart.geojson',     'BART', {color: '#0000FF', opacity: 1.0, weight: 4.0});
+			c.load_geojson('data/jobs.geojson', 'Future job centers', {}, 'dist/images/offices.png');
+
+			var legend = $('<ul />');
+			$('<li/>')
+				.append($('<img />').attr('src', 'dist/images/bus_station.png'))
+				.append('Starting point')
+				.appendTo(legend);
+			$('<li/>')
+				.append($('<img />').attr('src', 'dist/images/offices.png'))
+				.append('Employment center')
+				.appendTo(legend);
+			c.add_legend(legend);
+
+		});
+	</script>
+</body>
+</html>
+ 

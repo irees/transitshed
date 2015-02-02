@@ -1,7 +1,8 @@
-for arg in vta-ns vta-alt1 vta-alt4c
+for arg in bart-sj
 do
-  rm -rf gtfs-$arg
-  mkdir gtfs-$arg
-  python -m transvisor.geojson_gtfs $arg data/$arg.geojson gtfs-$arg;
-  zip ~/data/otp/gtfs-$arg.zip -j gtfs-$arg/*.txt  
+  echo "Agency: " $arg
+  rm -rf test-$arg
+  mkdir test-$arg
+  python -m transvisor.geojson_gtfs $arg data/test-$arg.geojson test-$arg;
+  zip ~/data/otp/test-$arg.zip -j test-$arg/*.txt  
 done

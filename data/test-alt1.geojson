@@ -4,15 +4,15 @@
     {
       "type": "Feature",
       "properties": {
-        "agency_id": "vta-alt4c",
+        "agency_id": "alt1",
         "headway": 600,
-        "speed": 38.0,
+        "speed": 26.5,
         "route_type": 3,
         "direction_id": 0,
         "trip_headsign": 522,
         "route_desc": "PALO ALTO - EASTRIDGE",
         "route_long_name": 522,
-        "route_short_name": ""   
+        "route_short_name": ""
       },
       "geometry": {
         "type": "LineString",
