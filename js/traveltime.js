@@ -133,7 +133,7 @@ var TravelTime = L.Control.extend({
 		var seconds = $('input[name=seconds]').val();
 		this.layermarker.clearLayers();
 		L.marker([stop.stop_lat, stop.stop_lon], {
-			icon: new baseicon({iconUrl:'/images/bus_station.png'})
+			icon: new baseicon({iconUrl:'../images/bus_station.png'})
 		}).addTo(this.layermarker);
 		this.layer1.clearLayers();
 		this.layer2.clearLayers();

@@ -4,12 +4,12 @@
 	<title>Travel Time: BART to San Jose Extension</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css/traveltime.css" />
-	<link rel="stylesheet" href="/dist/leaflet.css" />
+	<link rel="stylesheet" href="../css/traveltime.css" />
+	<link rel="stylesheet" href="../dist/leaflet.css" />
 	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="/dist/leaflet.js"></script>
-	<script src="/dist/jquery.js"></script>
-	<script src="/js/traveltime.js"></script>
+	<script src="../dist/leaflet.js"></script>
+	<script src="../dist/jquery.js"></script>
+	<script src="../js/traveltime.js"></script>
 </head>
 <body>
 	<div id="map" style="height: 100%"></div>
@@ -45,17 +45,17 @@
 			c.addTo(leafletmap);
 			c.load(c.options.scenario1, c.options.scenario2, stop_initial);		
 			c.load_geojson('bartsjx-4.geojson',  'BART to San Jose', {color: '#8ce485', opacity: 1.0, weight: 4.0});
-			c.load_geojson('/data/caltrain.geojson', 'Caltrain', {color: '#FF0000', opacity: 1.0, weight: 4.0});
-			c.load_geojson('/data/bart.geojson',     'BART', {color: '#0000FF', opacity: 1.0, weight: 4.0});
-			c.load_geojson('/data/jobs.geojson', 'Future job centers', {}, '/images/offices.png');
+			c.load_geojson('../data/caltrain.geojson', 'Caltrain', {color: '#FF0000', opacity: 1.0, weight: 4.0});
+			c.load_geojson('../data/bart.geojson',     'BART', {color: '#0000FF', opacity: 1.0, weight: 4.0});
+			c.load_geojson('../data/jobs.geojson', 'Future job centers', {}, '../images/offices.png');
 
 			var legend = $('<ul />');
 			$('<li/>')
-				.append($('<img />').attr('src', '/images/bus_station.png'))
+				.append($('<img />').attr('src', '../images/bus_station.png'))
 				.append('Starting point')
 				.appendTo(legend);
 			$('<li/>')
-				.append($('<img />').attr('src', '/images/offices.png'))
+				.append($('<img />').attr('src', '../images/offices.png'))
 				.append('Employment center')
 				.appendTo(legend);
 			c.add_legend(legend);
