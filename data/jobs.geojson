@@ -3,7 +3,9 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {"name":"Moffett Field"},
+      "properties": {
+        "name": "Moffett Field"
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -14,7 +16,9 @@
     },
     {
       "type": "Feature",
-      "properties": {"name":"Google"},
+      "properties": {
+        "name": "Google"
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -25,12 +29,30 @@
     },
     {
       "type": "Feature",
-      "properties": {"name":"Apple Campus 2"},
+      "properties": {
+        "name": "Apple Campus 2"
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
           -122.00980424880981,
           37.3332793787758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "Fremont Innovation & Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.94094657897949,
+          37.50066996300736
         ]
       }
     }

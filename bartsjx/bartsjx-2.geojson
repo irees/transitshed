@@ -4,16 +4,16 @@
     {
       "type": "Feature",
       "properties": {
-        "agency_id": "bart-sj",
+        "agency_id": "bartsjx-2",
         "headway": 300,
         "speed": 64,
         "route_type": 1,
         "direction_id": 0,
         "trip_headsign": 0,
         "route_desc": "BART",
-        "route_short_name": "BART to San Jose"
-        },
-        "geometry": {
+        "route_short_name": "BART to San Jose (2 stops)"
+      },
+      "geometry": {
         "type": "LineString",
         "coordinates": [
           [
@@ -33,20 +33,12 @@
             37.368520071054576
           ],
           [
-            -121.8687629699707,
-            37.3528122028819
-          ],
-          [
             -121.89077854156493,
             37.33617976989369
           ],
           [
             -121.903395652771,
             37.3319485736073
-          ],
-          [
-            -121.93699836730957,
-            37.35363093520024
           ]
         ]
       }

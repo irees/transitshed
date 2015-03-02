@@ -6,7 +6,7 @@ var baseicon = L.Icon.extend({
     }
 });
 
-var IsoControl = L.Control.extend({
+var TravelTime = L.Control.extend({
   options: {
 		scenarios: {},
 		scenario1: null,
@@ -133,7 +133,7 @@ var IsoControl = L.Control.extend({
 		var seconds = $('input[name=seconds]').val();
 		this.layermarker.clearLayers();
 		L.marker([stop.stop_lat, stop.stop_lon], {
-			icon: new baseicon({iconUrl:'dist/images/bus_station.png'})
+			icon: new baseicon({iconUrl:'/images/bus_station.png'})
 		}).addTo(this.layermarker);
 		this.layer1.clearLayers();
 		this.layer2.clearLayers();
@@ -175,7 +175,7 @@ var IsoControl = L.Control.extend({
       style.onEachFeature = function(feature, layer) {layer.bindPopup(feature.properties.name)}     
     }
 		$.getJSON(uri, function(data) {
-      var layer = new L.geoJson(data, style).addTo(self.layerroutes);    
+      var layer = new L.geoJson(data, style).addTo(self.layerroutes);
       $('<li />')
         .data('state', true)
         .click(function(e) {
@@ -208,7 +208,7 @@ var IsoControl = L.Control.extend({
     layer.clearLayers();
     for (var isochrone in isochrones.features) {
     	isochrone = isochrones.features[isochrone];
-		var time = isochrone.properties['Time'];
+		var time = isochrone.properties['time'];
 		style['className'] = 'isochrone isochrone-'+time;
 		var isochronelayer = new L.geoJson(isochrone, style).addTo(layer);
 		$('.isochrone-'+time).hide();
@@ -230,7 +230,7 @@ var IsoControl = L.Control.extend({
 
     ///////////////////
     var ind = [this.options.indicator1, this.options.indicator2]; 
-    var labels = {'census:pop':'Population', 'census:jobs':'Jobs'}
+    var labels = {'pop':'Population', 'jobs':'Jobs'}
     var keys = {};
     var cats = {};
     ind.map(function(i) {   
