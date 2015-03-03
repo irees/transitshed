@@ -4,12 +4,12 @@
 	<title>Transit Attractor</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="../css/traveltime.css" />
+	<link rel="stylesheet" href="../css/transitshed.css" />
 	<link rel="stylesheet" href="../dist/leaflet.css" />
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="../dist/leaflet.js"></script>
 	<script src="../dist/jquery.js"></script>
-	<script src="../js/traveltime.js"></script>
+	<script src="../js/transitshed.js"></script>
 </head>
 <body>
 	<div id="map" style="height: 100%"></div>
@@ -38,7 +38,7 @@
 		
 		// Initialize
 		$.getJSON('vtabrt-stops.json', function(data) {
-			var c = new TravelTime({
+			var c = new TransitShed({
 				dataset: DATASET,
 				stops: data,
 				stop_initial: stop_initial,

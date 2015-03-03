@@ -6,7 +6,7 @@ var baseicon = L.Icon.extend({
     }
 });
 
-var TravelTime = L.Control.extend({
+var TransitShed = L.Control.extend({
   options: {
 		scenarios: {},
 		scenario1: null,
